@@ -34,17 +34,22 @@ def create_huffman_tree(values):
 def compress(text):
     frequencies = {}
     values = []
-    
+    print 'input: %d bits.' % (len(text) * 8)
+	
+	# get frequencies and characters
     for character in text:
         if character not in frequencies:
             frequencies[character] = 0
         frequencies[character] += 1
     for key in frequencies:
         values.append((key,frequencies[key]))
-    
+    # create tree
     root = create_huffman_tree(values)
     
-
+	# created tree, now to encode
+	
+	
+	
 def decompress(text):
     pass 
 
