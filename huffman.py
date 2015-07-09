@@ -23,7 +23,7 @@ def create_huffman_tree(values):
         nodes.append(Node(value))
     while len(nodes) > 1:
         nodes = sorted(nodes,key=lambda node: node.value[0])
-        root = Node((nodes[0].value[0]+nodes[1].value[0],'*'),nodes[0],nodes[1])
+        root = Node(('*',nodes[0].value[1]+nodes[1].value[1]),nodes[0],nodes[1])
         left = nodes.pop(0)
         left.position = '0'
         right = nodes.pop(0)
@@ -44,7 +44,7 @@ def compress(text):
             frequencies[character] = 0
         frequencies[character] += 1
     for key in frequencies:
-        values.append((key,frequencies[key]))
+        values.append((frequencies[key],key))
     # create tree
     root = create_huffman_tree(values)
     
@@ -57,19 +57,21 @@ def compress(text):
     while len(parent_stack) > 0 or current != None:
         if current != None:
             parent_stack.append(current)
+            if current.left != None:
+                code += '0'
             current = current.left
-            code += '0'
         else:
             current = parent_stack.pop()
             code = code[:-1]
             
             # visit
-            print current.value
             if current != None and current.is_leaf():
                 codes[current.value[1]] = code
             
+            if current.right != None:
+                code += '1'
             current = current.right
-            code += '1'
+        print code
     
     # store huffman tree into code
     for c in codes:
@@ -88,5 +90,5 @@ if __name__ == '__main__':
         (45,'6')
     ]
     
-    input_text = "hello. my name is Bao."
+    input_text = "test"
     compress(input_text)
